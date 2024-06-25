@@ -9,6 +9,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -20,8 +21,9 @@ class FileStorage:
             if isinstance(cls, str):
                 cls = globals().get(cls)
             if cls and issubclass(cls, BaseModel):
-                cls_dict = {k: v for k,
-                        v in self.__objects.items() if isinstance(v, cls)}
+                cls_dict = {
+                    k: v for k,
+                    v in self.__objects.items() if isinstance(v, cls)}
                 return cls_dict
         return FileStorage.__objects
 
@@ -50,7 +52,7 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
         except json.decoder.JSONDecodeError:
@@ -61,7 +63,7 @@ class FileStorage:
         key = "{}.{}".format(type(obj).__name__, obj.id)
         if key in self.__objects:
             del self.__objects[key]
-        if obj == None:
+        if obj is None:
             return
 
         classes = {
@@ -74,6 +76,6 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
