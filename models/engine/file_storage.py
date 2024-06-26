@@ -16,7 +16,10 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
+        """Returns a dictionary of models currently in storage
+        returns the list of objects of one type of classreturns
+        the list of objects of one type of class
+        """
         if cls:
             if isinstance(cls, str):
                 cls = globals().get(cls)
@@ -41,7 +44,8 @@ class FileStorage:
             json.dump(temp, f)
 
     def reload(self):
-        """Loads storage dictionary from file."""
+        """Loads storage dictionary from file"""
+
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
                     'State': State, 'City': City, 'Amenity': Amenity,
@@ -59,23 +63,14 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ Method to delete OBJ from __objects """
-        key = "{}.{}".format(type(obj).__name__, obj.id)
-        if key in self.__objects:
-            del self.__objects[key]
+        """Method to delete OBJ from __objects"""
         if obj is None:
             return
 
-        classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+        obj_del = f"{obj.__class__.__name__}.{obj.id}"
         try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
-        except FileNotFoundError:
+            del FileStorage.__objects[obj_del]
+        except AttributeError:
+            pass
+        except KeyboardInterrupt:
             pass
