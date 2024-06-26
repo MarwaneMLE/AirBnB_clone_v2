@@ -2,7 +2,7 @@
 """ This modules handles Database Storage """
 from sqlalchemy import create_engine
 from os import getenv
-from models.base_model import Base
+from models.base_model import Base, BaseModel
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -10,6 +10,7 @@ from models.state import State
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.user import User
 from models.amenity import Amenity
+from sqlalchemy.orm import relationship
 
 
 class DBStorage:
@@ -77,7 +78,8 @@ class DBStorage:
 
     def delete(self, obj=None):
         '''delete obj from the current database session'''
-        self.__session.delete(obj)
+        if obj is not None:
+            self.__session.delete(obj)
 
     def reload(self):
         '''
